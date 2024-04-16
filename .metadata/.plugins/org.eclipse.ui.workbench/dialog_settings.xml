@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<section name="Workbench">
+	<section name="FileSystemImportWizard">
+		<item key="WizardFileSystemResourceImportPage1.STORE_OVERWRITE_EXISTING_RESOURCES_ID" value="false"/>
+		<item key="WizardFileSystemResourceImportPage1.STORE_CREATE_CONTAINER_STRUCTURE_ID" value="false"/>
+		<list key="WizardFileSystemResourceImportPage1.STORE_SOURCE_NAMES_ID">
+			<item value="D:\ECE544\PID_FREERTOS_Project2\Driver"/>
+			<item value="D:\ECE544\Project1_pwm_detector\ece544w24_proj1_release_1_0\appl_test_nexys4io_soln"/>
+		</list>
+	</section>
+	<section name="org.eclipse.ui.internal.QuickAccess">
+		<item key="org.eclipse.ui.internal.quickaccess.QuickAccessDialogDIALOG_WIDTH" value="450"/>
+		<item key="org.eclipse.ui.internal.quickaccess.QuickAccessDialogDIALOG_HEIGHT" value="506"/>
+		<item key="org.eclipse.ui.internal.quickaccess.QuickAccessDialogDIALOG_USE_PERSISTED_SIZE" value="true"/>
+		<item key="org.eclipse.ui.internal.quickaccess.QuickAccessDialogDIALOG_USE_PERSISTED_LOCATION" value="false"/>
+		<list key="orderedElements">
+			<item value="/PID_Controller_Platform/microblaze_0/freertos10_xilinx_domain/bsp/microblaze_0/libsrc/iic_v3_9/src/xiic_l.c"/>
+			<item value="/PID_Controller_Platform/microblaze_0/freertos10_xilinx_domain/bsp/microblaze_0/libsrc/iic_v3_9/src/xiic_sinit.c"/>
+			<item value="/PID_Controller_Platform/export/PID_Controller_Platform/sw/PID_Controller_Platform/freertos10_xilinx_domain/bspinclude/include/xparameters.h"/>
+			<item value="/PID_Controller_Platform/microblaze_0/freertos10_xilinx_domain/bsp/microblaze_0/libsrc/uartlite_v3_7/src/xuartlite.c"/>
+			<item value="/PID_Controller_Platform/export/PID_Controller_Platform/sw/PID_Controller_Platform/freertos10_xilinx_domain/bspinclude/include/semphr.h"/>
+			<item value="/PID_Controller_Platform/microblaze_0/freertos10_xilinx_domain/bsp/microblaze_0/libsrc/iic_v3_9/src/xiic.c"/>
+		</list>
+		<list key="orderedProviders">
+			<item value="org.eclipse.ui.ide/org.eclipse.ui.internal.ide.dialogs.OpenResourceQuickAccessComputer"/>
+			<item value="org.eclipse.ui.ide/org.eclipse.ui.internal.ide.dialogs.OpenResourceQuickAccessComputer"/>
+			<item value="org.eclipse.ui.ide/org.eclipse.ui.internal.ide.dialogs.OpenResourceQuickAccessComputer"/>
+			<item value="org.eclipse.ui.ide/org.eclipse.ui.internal.ide.dialogs.OpenResourceQuickAccessComputer"/>
+			<item value="org.eclipse.ui.ide/org.eclipse.ui.internal.ide.dialogs.OpenResourceQuickAccessComputer"/>
+			<item value="org.eclipse.ui.ide/org.eclipse.ui.internal.ide.dialogs.OpenResourceQuickAccessComputer"/>
+		</list>
+		<list key="textEntries">
+			<item value="1"/>
+			<item value="2"/>
+			<item value="1"/>
+			<item value="1"/>
+			<item value="1"/>
+			<item value="1"/>
+		</list>
+		<list key="textArray">
+			<item value="xiic_l"/>
+			<item value="xiic_sinit"/>
+			<item value="xiic"/>
+			<item value="xpara"/>
+			<item value="xuart"/>
+			<item value="semp"/>
+			<item value="xii"/>
+		</list>
+	</section>
+</section>

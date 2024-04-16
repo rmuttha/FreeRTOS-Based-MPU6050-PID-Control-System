@@ -1,0 +1,358 @@
+/**
+* @file PID_Project.c
+*
+* @author Raksha Mairpady and Ruthuja Mutta
+*
+* @brief 
+*
+******************************************************************************/
+/*********** Include Files **********/
+#include <stdbool.h>
+#include  "platform.h"
+#include  "xil_printf.h"
+#include  "xparameters.h"
+#include  "xstatus.h"
+#include  "xiic.h"
+#include  "nexys4IO.h"
+#include  "xuartlite_l.h"
+#include  "xuartlite.h"
+#include "FreeRTOS.h"
+#include "semphr.h"
+#include  "shared_resources.h"
+#include "task.h"
+#include "mpu6050.h"
+#include "microblaze_sleep.h"
+
+/*********** Peripheral-related constants **********/
+// Clock frequencies
+#define CPU_CLOCK_FREQ_HZ		XPAR_CPU_CORE_CLOCK_FREQ_HZ
+#define AXI_CLOCK_FREQ_HZ		XPAR_CPU_M_AXI_DP_FREQ_HZ
+
+// Definitions for peripheral NEXYS4IO
+#define N4IO_DEVICE_ID		    XPAR_NEXYS4IO_0_DEVICE_ID
+#define N4IO_BASEADDR		    XPAR_NEXYS4IO_0_S00_AXI_BASEADDR
+#define N4IO_HIGHADDR		    XPAR_NEXYS4IO_0_S00_AXI_HIGHADDR
+
+/*********Definitions for peripheral AXI_IIC************/
+#define IIC_ID 			XPAR_IIC_0_DEVICE_ID
+#define IIC_BADDR		XPAR_IIC_0_BASEADDR
+
+/*********** Application-specific constants **********/
+#define NBTNS 			5		// number of buttons
+/*
+float gyroAngleX = 0.0f;
+float integralVal = 0.0f;
+float error = 0.0f;
+float prev_error = 0.0f;
+float angle_new = 0.0f;
+//volatile uint8_t roll;*/
+/****************************** Task Handle *********************
+static TaskHandle_t menuTaskHandle = NULL;
+static TaskHandle_t dataTaskHandle = NULL;
+static TaskHandle_t pidTaskHandle = NULL;
+static TaskHandle_t exitTaskHandle = NULL;
+ taskParameters_t taskParam;
+
+/********** AXI Peripheral Instances **********/
+XIic 		IICInst;		//Th instance of IIC
+// bool gyroConfigured = false;
+
+/********** Function Prototypes **********/
+int	 do_init(void);
+int InitializeIIC(XIic *IicInstancePtr, u16 iicid);
+u32 Checks_Button(u32 btns);
+
+/************************ TASK Declarations*************************/
+//void MenuTask(void *pvParameters);
+//void DataTask(void *pvParameters);
+//void PIDTask(void *pvParameters);
+//void ExitTask(void *pvParameters);
+
+
+/************************* MAIN Program **************************/
+int main()
+{
+	int Status;
+	//taskParam.mode = RUN;
+	init_platform();
+	uint32_t sts = do_init();
+	if (XST_SUCCESS != sts){
+		xil_printf("FATAL(main): System initialization failed\r\n");
+		return 1;
+	}
+	Status = InitializeIIC(&IICInst, IIC_ID);
+	    if (Status != XST_SUCCESS) {
+	        xil_printf("IIC initialization failed!\r\n");
+	        return XST_FAILURE;
+	    }
+
+	 mpu6050_init(&IICInst);
+	 usleep(50000);
+	while(1) {
+	         gettempData(&IICInst);
+	     }
+}
+
+int	 do_init(void) {
+	uint32_t status;				// status from Xilinx Lib calls
+
+	// initialize the Nexys4 driver
+	status = NX4IO_initialize(N4IO_BASEADDR);
+	if (status != XST_SUCCESS){
+		return XST_FAILURE;
+	}
+      return XST_SUCCESS;
+}
+
+ int InitializeIIC(XIic *IicInstancePtr, u16 iicid) {
+
+     xil_printf("IIC Initialized Successfully\r\n");
+
+     return XST_SUCCESS;
+ }
+
+/*
+void MenuTask(void *pvParameters){
+
+	char c, mode = 0;
+	int angle = 0;
+
+	for( ; ;)
+	{
+		xil_printf("ECE 544 PROJECT 2 \r\n");
+		xil_printf("By Raksha Mairpady (email:raksham@pdx.edu) and Rutuja Muttha (email:rmuttha@pdx.edu) \r\n\n");
+		xil_printf("Enter R or r for run mode: \n\r");
+		xil_printf("Enter S or s for sleep mode: \n\r ");
+
+		mode = inbyte();
+
+		while(mode == '\0') mode = inbyte();
+
+		switch(mode)
+		{
+		case 'r':
+		case 'R':
+
+			xil_printf("Enter the target angle (in degrees)\n\r");
+			char input[10]; // Assuming the input won't exceed 10 characters
+			int index = 0;
+			char c;
+			do {
+			    c = inbyte();
+			    if (c == '\n' || c == '\r') { // Check for newline or carriage return
+			        break; // Exit the loop if newline or carriage return is encountered
+			    }
+			    input[index++] = c;
+			    xil_printf("%c", c); // Echo back the character
+			} while (index < sizeof(input) - 1); // Make sure to not exceed the buffer size
+			input[index] = '\0'; // Null-terminate the string
+			angle = atoi(input); // Convert the string to an integer
+
+			mode = 'r';
+			break;
+
+		case 's':
+		case 'S':
+			mode = 's';
+			break;
+		};
+
+
+	taskParam.target_angle = angle;
+	xil_printf("Target ANGLE: %d\n\r", (int)taskParam.target_angle);
+
+	taskParam.mode = (mode == 'r')? RUN :
+						(mode == 't') ? TEST:
+						(mode == 's') ? EXIT: -1;
+
+	taskParam.valid = false;
+
+	xil_printf("Mode: %s(%d)\n\r", (mode == 'r') ? "RUN" : (mode == 's') ? "SLEEP" : "Undefined mode", mode);
+
+	angle = 0;
+	if(mode == 'r')
+	{
+		//xil_printf("I am inside the loop");
+		vTaskResume(dataTaskHandle);
+		//xil_printf("I am inside the task handle thing");
+		vTaskResume(pidTaskHandle);
+		vTaskResume(exitTaskHandle);
+		vTaskSuspend(menuTaskHandle);
+
+	}
+	else if(mode == 's')
+	{
+		int exit = 0;
+
+		mpu6050_setSleepMode(&IICInst);
+
+		do{
+			exit = NX4IO_getSwitches();
+			xil_printf("Sleep Mode\n\r");
+		} while (exit == 0);
+
+		mpu6050_clearSleepMode(&IICInst);
+	}
+
+	}
+}
+
+
+void DataTask(void *pvParameters)
+{
+	int axis = SET_AXIS_X;
+	u8 currRawGyroVal[6];
+	//float roll;
+
+	for( ; ; )
+	{
+		for(axis = SET_AXIS_X; axis <= SET_AXIS_X; axis++)
+
+		{
+			mpu6050_getGyroData(&IICInst, &currRawGyroVal[axis - SET_AXIS_X], SET_AXIS_X);
+		}
+		//usleep(50000);
+		// xil_printf("Curr Raw Value is:  %d\n\r", *currRawGyroVal, currRawGyroVal[0] << 8 | currRawGyroVal[1]);
+		short GyroX = (currRawGyroVal[0] << 8 | currRawGyroVal[1]);
+
+	//	xil_printf("GyroX value is: %d\n\r", GyroX);
+
+
+	if((int)(GyroX / 131.0f) != -4)
+							gyroAngleX += (int)(GyroX * 0.1 / 131.0f);
+		//gyroAngleX = GyroX / 131.0;
+	//float	gyroAngleX1 = gyroAngleX * 0.1;
+	//xil_printf("gyroAngleX1: %d\n\r", (int)gyroAngleX);
+	//float gyroAngleReal = gyroAngleX;
+//	xil_printf("Angle X %d\n\r", (int)gyroAngleReal);
+
+	//	xil_printf("Angle X %d\n\r", (int)gyroAngleX1);
+
+		vTaskDelay(pdMS_TO_TICKS(50));
+
+		//taskParam.roll = gyroAngleX + 4;
+		taskParam.roll =  gyroAngleX;
+//	xil_printf("roll in Data: %d  \n\r",(int) gyroAngleX);
+//	xil_printf("roll in taskParam: %d \n\r", (int) taskParam.roll);
+	}
+}
+
+void PIDTask(void *pvParameters)
+{
+	float kp = 1.2f;
+	float ki = 0.2f;
+	float kd = 0.06f;
+	float time_step = 0.05f;
+	u8 check;
+	u8 btns;
+
+	//xil_printf("I am in PID task");
+	for( ; ; )
+	{
+		float currAngle = taskParam.roll;
+		//xil_printf("roll in pid: %d.%02d\n\r", currAngle);
+		float target_angle = (float) taskParam.target_angle;
+
+
+		if(taskParam.mode == RUN)
+		{
+			prev_error = error;
+			error = target_angle - currAngle;
+			//xil_printf("Error is: %d.%02d\n\r", error);
+			integralVal += error * time_step;
+			//xil_printf("Integral Value is: %d.%02d\n\r", integralVal);
+			angle_new = currAngle + kp * error + kd * ((error - prev_error) / time_step) + ki * integralVal;
+		//	xil_printf("New Angle is: %d.%02d\n\r", angle_new);
+		//	xil_printf("PID task have angle_new is: %d \n\r", angle_new);
+
+			 btns = NX4IO_getBtns();
+			 check = Checks_Button(btns);
+	}
+		xil_printf("%d.%02d    ", (int)currAngle, (int)(currAngle - (int)currAngle) * 1000);
+		xil_printf("%d.%02d    " , (int)target_angle, (int)(target_angle - (int)target_angle) * 1000);
+		xil_printf("%d.%02d    " , (int)error, (error - (int)error) * 1000);
+		xil_printf("%d.%02d\n\r" , (int)angle_new, (int)(angle_new - (int)angle_new) * 1000);
+
+		vTaskDelay(pdMS_TO_TICKS(100));
+	}
+}
+
+void ExitTask(void *pvParameters)
+{
+	u16 c = 0x0000;
+	for( ; ; )
+	{
+		c = NX4IO_getSwitches();
+
+		if (c != 0)
+		{
+			taskParam.target_angle = 0.0f;
+			taskParam.currAngle = 0.0f;
+			taskParam.roll = 0.0f;
+			gyroAngleX = 0.0f;
+			integralVal = 0.0f;
+			error = 0.0f;
+			prev_error = 0.0f;
+			angle_new = 0.0f;
+
+			vTaskSuspend(dataTaskHandle);
+			vTaskSuspend(pidTaskHandle);
+			vTaskResume(menuTaskHandle);
+			vTaskSuspend(NULL);
+		}
+		vTaskDelay(pdMS_TO_TICKS(100));
+	}
+}
+
+u32 Checks_Button(u32 btns)
+{
+	static bool isInitialized = false;	// true if the function has run at least once
+	static u32 prevBtns;	// previous value of button register
+	float target_angle = (float) taskParam.target_angle;
+
+	// initialize the static variables the first time the function is called
+	if (!isInitialized) {
+		prevBtns = btns ^ 0x1F;	// invert btns to get everything started
+
+		isInitialized = true;
+	}
+
+
+	if ((prevBtns^ btns) != 0) {
+		u32 btnMsk = 0x00000001;
+		for(int i=0 ; i < NBTNS ; i++)
+		{
+			if(btns & (btnMsk << i)){
+				switch(i){
+					// iterate through the buttons and modify global PWM duty cycle variables
+					case 0:	// btnC - disable/enable PWM
+							xil_printf(" hello 1 \r\n");
+							break;
+
+					case 1:	// btnU - Green duty cycle
+						//taskParam.target_angle  += 10;
+							break;
+
+					case 2: // btnL - Set all duty cycles to 0
+						taskParam.target_angle  -= 10;
+							break;
+					case 3:	// btnR = Blue duty cycle
+						taskParam.target_angle  += 10;
+							break;
+
+					case 4:	// btnD - duty cycle
+						//taskParam.target_angle  -= 10;
+							break;
+
+					default: // shouldn't get here
+							break;
+	                   }
+                }
+		}
+			prevBtns=btns;
+	}
+	return btns;
+	}
+*/
+
+

@@ -1,0 +1,26 @@
+#-----------------------------------------------------------
+# Vivado v2022.2 (64-bit)
+# SW Build 3671981 on Fri Oct 14 05:00:03 MDT 2022
+# IP Build 3669848 on Fri Oct 14 08:30:02 MDT 2022
+# Start of session at: Wed Feb 21 17:15:19 2024
+# Process ID: 28680
+# Current directory: E:/EMBEDDED_DESIGN/PID_CONTROL_PROJ1/TEST1_VIVADO/project_1/project_1.runs/embsys_ilmb_v10_3_synth_1
+# Command line: vivado.exe -log embsys_ilmb_v10_3.vds -product Vivado -mode batch -messageDb vivado.pb -notrace -source embsys_ilmb_v10_3.tcl
+# Log file: E:/EMBEDDED_DESIGN/PID_CONTROL_PROJ1/TEST1_VIVADO/project_1/project_1.runs/embsys_ilmb_v10_3_synth_1/embsys_ilmb_v10_3.vds
+# Journal file: E:/EMBEDDED_DESIGN/PID_CONTROL_PROJ1/TEST1_VIVADO/project_1/project_1.runs/embsys_ilmb_v10_3_synth_1\vivado.jou
+# Running On: LAPTOP-I10N6P43, OS: Windows, CPU Frequency: 1800 MHz, CPU Physical cores: 4, Host memory: 8471 MB
+#-----------------------------------------------------------
+source embsys_ilmb_v10_3.tcl -notrace
+create_project: Time (s): cpu = 00:00:09 ; elapsed = 00:00:23 . Memory (MB): peak = 1002.004 ; gain = 118.000
+INFO: [IP_Flow 19-234] Refreshing IP repositories
+INFO: [IP_Flow 19-1700] Loaded user IP repository 'e:/EMBEDDED_DESIGN/PROJECT_1_DELIVERABLES/ece544w24_proj1_release_1_0/IP/ece544ip_w24'.
+INFO: [IP_Flow 19-2313] Loaded Vivado IP repository 'F:/Vivado/2022.2/data/ip'.
+INFO: [IP_Flow 19-6924] IPCACHE: Running cache check for IP inst: embsys_ilmb_v10_3
+INFO: [IP_Flow 19-6922] IPCACHE: Exporting cached entry b24face942d20260 to dir: E:/EMBEDDED_DESIGN/PID_CONTROL_PROJ1/TEST1_VIVADO/project_1/project_1.runs/embsys_ilmb_v10_3_synth_1
+INFO: [IP_Flow 19-6928] IPCACHE: copied cached file e:/EMBEDDED_DESIGN/PID_CONTROL_PROJ1/TEST1_VIVADO/project_1/project_1.cache/ip/2022.2/b/2/b24face942d20260/embsys_dlmb_v10_3.dcp to E:/EMBEDDED_DESIGN/PID_CONTROL_PROJ1/TEST1_VIVADO/project_1/project_1.runs/embsys_ilmb_v10_3_synth_1/embsys_ilmb_v10_3.dcp.
+INFO: [IP_Flow 19-6928] IPCACHE: copied cached file e:/EMBEDDED_DESIGN/PID_CONTROL_PROJ1/TEST1_VIVADO/project_1/project_1.cache/ip/2022.2/b/2/b24face942d20260/embsys_dlmb_v10_3_sim_netlist.v to E:/EMBEDDED_DESIGN/PID_CONTROL_PROJ1/TEST1_VIVADO/project_1/project_1.runs/embsys_ilmb_v10_3_synth_1/embsys_ilmb_v10_3_sim_netlist.v.
+INFO: [IP_Flow 19-6928] IPCACHE: copied cached file e:/EMBEDDED_DESIGN/PID_CONTROL_PROJ1/TEST1_VIVADO/project_1/project_1.cache/ip/2022.2/b/2/b24face942d20260/embsys_dlmb_v10_3_sim_netlist.vhdl to E:/EMBEDDED_DESIGN/PID_CONTROL_PROJ1/TEST1_VIVADO/project_1/project_1.runs/embsys_ilmb_v10_3_synth_1/embsys_ilmb_v10_3_sim_netlist.vhdl.
+INFO: [IP_Flow 19-6928] IPCACHE: copied cached file e:/EMBEDDED_DESIGN/PID_CONTROL_PROJ1/TEST1_VIVADO/project_1/project_1.cache/ip/2022.2/b/2/b24face942d20260/embsys_dlmb_v10_3_stub.v to E:/EMBEDDED_DESIGN/PID_CONTROL_PROJ1/TEST1_VIVADO/project_1/project_1.runs/embsys_ilmb_v10_3_synth_1/embsys_ilmb_v10_3_stub.v.
+INFO: [IP_Flow 19-6928] IPCACHE: copied cached file e:/EMBEDDED_DESIGN/PID_CONTROL_PROJ1/TEST1_VIVADO/project_1/project_1.cache/ip/2022.2/b/2/b24face942d20260/embsys_dlmb_v10_3_stub.vhdl to E:/EMBEDDED_DESIGN/PID_CONTROL_PROJ1/TEST1_VIVADO/project_1/project_1.runs/embsys_ilmb_v10_3_synth_1/embsys_ilmb_v10_3_stub.vhdl.
+INFO: [IP_Flow 19-4838] Using cached IP synthesis design for IP embsys_ilmb_v10_3, cache-ID = b24face942d20260.
+INFO: [Common 17-206] Exiting Vivado at Wed Feb 21 17:16:49 2024...

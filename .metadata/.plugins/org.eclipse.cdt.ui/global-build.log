@@ -1,0 +1,37 @@
+Nothing to build in platform 'PID_Controller_Platform'
+
+17:17:37 **** Incremental Build of configuration Debug for project PID_Controller_Application ****
+make all 
+'Building file: ../src/mpu6050.c'
+'Invoking: MicroBlaze gcc compiler'
+mb-gcc -Wall -O0 -g3 -c -fmessage-length=0 -MT"src/mpu6050.o" -ID:/ECE544/PID_CONTROL_PROJ1/PID_Controller_Platform/export/PID_Controller_Platform/sw/PID_Controller_Platform/freertos10_xilinx_domain/bspinclude/include -mlittle-endian -mcpu=v11.0 -mxl-soft-mul -Wl,--no-relax -ffunction-sections -fdata-sections -MMD -MP -MF"src/mpu6050.d" -MT"src/mpu6050.o" -o "src/mpu6050.o" "../src/mpu6050.c"
+../src/mpu6050.c: In function 'gettempData':
+../src/mpu6050.c:76:21: warning: unused variable 'decimal_part' [-Wunused-variable]
+   76 |             int16_t decimal_part = (int16_t)((final_data_out - int_part) * 1000); // Extract three decimal digits
+      |                     ^~~~~~~~~~~~
+../src/mpu6050.c: At top level:
+../src/mpu6050.c:88:2: warning: "/*" within comment [-Wcomment]
+   88 |  /**
+      |   
+../src/mpu6050.c:120:2: warning: "/*" within comment [-Wcomment]
+  120 |  /**
+      |   
+../src/mpu6050.c:150:2: warning: "/*" within comment [-Wcomment]
+  150 |  /**
+      |   
+'Finished building: ../src/mpu6050.c'
+' '
+'Building target: PID_Controller_Application.elf'
+'Invoking: MicroBlaze gcc linker'
+mb-gcc -Wl,-T -Wl,../src/lscript.ld -LD:/ECE544/PID_CONTROL_PROJ1/PID_Controller_Platform/export/PID_Controller_Platform/sw/PID_Controller_Platform/freertos10_xilinx_domain/bsplib/lib -mlittle-endian -mcpu=v11.0 -mxl-soft-mul -Wl,--no-relax -Wl,--gc-sections -o "PID_Controller_Application.elf"  ./src/FusionAhrs.o ./src/FusionOffset.o ./src/mpu6050.o ./src/platform.o ./src/uart_testing.o   -Wl,--start-group,-lxil,-lfreertos,-lgcc,-lc,--end-group
+'Finished building target: PID_Controller_Application.elf'
+' '
+'Invoking: MicroBlaze Print Size'
+mb-size PID_Controller_Application.elf  |tee "PID_Controller_Application.elf.size"
+   text	   data	    bss	    dec	    hex	filename
+  20684	    396	   3504	  24584	   6008	PID_Controller_Application.elf
+'Finished building: PID_Controller_Application.elf.size'
+' '
+17:17:39 **** Incremental Build of configuration Debug for project PID_Controller_Application_system ****
+make all 
+Skipping SD card image generation. Reason: "The system project only has applications for microblaze processors."

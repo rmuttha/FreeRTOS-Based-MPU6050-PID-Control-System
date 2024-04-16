@@ -1,0 +1,6 @@
+17:17:39 **** Incremental Build of configuration Debug for project PID_Controller_Application_system ****
+make all 
+Skipping SD card image generation. Reason: "The system project only has applications for microblaze processors."
+
+17:17:40 Build Finished (took 327ms)
+

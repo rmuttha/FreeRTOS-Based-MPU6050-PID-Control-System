@@ -1,0 +1,15 @@
+vhdl xil_defaultlib  \
+"../../../bd/embsys/ip/embsys_microblaze_0_3/sim/embsys_microblaze_0_3.vhd" \
+"../../../bd/embsys/ip/embsys_dlmb_v10_3/sim/embsys_dlmb_v10_3.vhd" \
+"../../../bd/embsys/ip/embsys_ilmb_v10_3/sim/embsys_ilmb_v10_3.vhd" \
+"../../../bd/embsys/ip/embsys_dlmb_bram_if_cntlr_3/sim/embsys_dlmb_bram_if_cntlr_3.vhd" \
+"../../../bd/embsys/ip/embsys_ilmb_bram_if_cntlr_3/sim/embsys_ilmb_bram_if_cntlr_3.vhd" \
+"../../../bd/embsys/ip/embsys_microblaze_0_axi_intc_2/sim/embsys_microblaze_0_axi_intc_2.vhd" \
+"../../../bd/embsys/ip/embsys_mdm_1_2/sim/embsys_mdm_1_2.vhd" \
+"../../../bd/embsys/ip/embsys_axi_timer_0_2/sim/embsys_axi_timer_0_2.vhd" \
+"../../../bd/embsys/ip/embsys_axi_iic_0_3/sim/embsys_axi_iic_0_3.vhd" \
+"../../../bd/embsys/ip/embsys_axi_uartlite_0_2/sim/embsys_axi_uartlite_0_2.vhd" \
+"../../../bd/embsys/ip/embsys_rst_clk_wiz_1_100M_3/sim/embsys_rst_clk_wiz_1_100M_3.vhd" \
+"../../../bd/embsys/ip/embsys_axi_gpio_0_1/sim/embsys_axi_gpio_0_1.vhd" \
+
+nosort

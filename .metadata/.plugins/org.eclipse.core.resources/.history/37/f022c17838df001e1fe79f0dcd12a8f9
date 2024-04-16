@@ -1,0 +1,179 @@
+//////////////////////////////////////////////////////////////////////////////////////////
+//
+// 	@file			mpu6050.c
+//	@Author			Rutuja Muttha & Raksha Mairpady
+//
+//	@Date			27th February 2024
+//	@Email 			rmuttha@pdx.edu & raksham@pdx.edu
+//
+//	@Brief			Contains the MPU6050 sensor's functions definition.
+//
+//	@rev	1.0		- Added definitions and created a file for initialization
+//					- Included a simple gyro arrangement and recorded X axis data
+//
+//  @rev	1.1		- Added changes to getGyroData function for proper functioning
+//
+/////////////////////////////////////////////////////////////////////////////////////////
+
+#include "mpu6050.h"
+#include  "xiic.h"
+
+/**
+ * @brief Initializes the MPU6050 sensor.
+ *
+ * @param IICInst Pointer to the I2C instance used for communication.
+ */
+ void mpu6050_init(XIic* IICInst)
+ {
+ 	u8 oBuf[2];
+ 	u8 iBuf = 0x00;
+
+	// Read WHO_AM_I register to verify communication with the sensor
+ 	oBuf[0] = 0x75;
+ 	oBuf[1] = 0x00;
+ 	XIic_Send(IIC_BADDR, 0x68, oBuf, 1, XIIC_REPEATED_START);
+ 	XIic_Recv(IIC_BADDR, 0x68, &iBuf, 1, XIIC_STOP);
+ 	xil_printf("WHO_AM_I is 0x%x\n\r", iBuf);
+
+ 	 // Read Power Management 1 register to check current settings
+ 	oBuf[0] = PWR_MGMT_1;
+ 	XIic_Send(IIC_BADDR, 0x68, oBuf, 1, XIIC_REPEATED_START);
+ 	XIic_Recv(IIC_BADDR, 0x68, &iBuf, 1, XIIC_STOP);
+ 	xil_printf("Power Management 1 is 0x%x\n\r", iBuf);
+
+ 	// Configure Power Management 1 register to wake up sensor
+ 	oBuf[0] = PWR_MGMT_1;
+ 	oBuf[1] = 0x00;
+ 	XIic_Send(IIC_BADDR, 0x68, oBuf, 2, XIIC_STOP);
+
+ 	// Read back Power Management 1 register to verify configuration
+ 	oBuf[0] = PWR_MGMT_1;
+ 	oBuf[1] = 0x00;
+ 	XIic_Send(IIC_BADDR, 0x68, oBuf, 1, XIIC_REPEATED_START);
+ 	XIic_Recv(IIC_BADDR, 0x68, &iBuf, 1, XIIC_STOP);
+ 	xil_printf("Power value is 0x%x\n\r", iBuf);
+
+
+ }
+
+ void gettempData(XIic* IICInst){
+
+ 	 u8 buffer[2];
+ 	     int16_t temperature;
+ 	     u8 oBuf;
+ 	     oBuf = TEMP_OUT_H;
+
+ 	     // Read temperature data from the sensor
+ 	     XIic_Send(IIC_BADDR, 0x68, &oBuf, 1, XIIC_REPEATED_START);
+ 	     XIic_Recv(IIC_BADDR, 0x68, buffer, 2, XIIC_STOP);
+
+ 	     // Combine high and low bytes to form 16-bit signed integer
+ 	     temperature = ((buffer[0] << 8) | buffer[1]);
+
+ 	     xil_printf("temperature is: %d\n\r", temperature);
+
+ 	     int16_t final_data_out = temperature / 340.0 + 36.53;
+ 	 xil_printf("final data of temp is: %d.%2d\n\r", final_data_out);
+  }
+
+/*
+ /**
+  * @brief Configures the gyroscope settings of the MPU6050 sensor.
+  *
+  * This function sets the configuration of the gyroscope in the MPU6050 sensor via the I2C interface.
+  * It writes the desired configuration value (0x00) to the GYRO_CONFIG register, which controls
+  * various parameters such as the full-scale range and sensitivity of the gyroscope.
+  * After setting the configuration, it reads back the configured value from the sensor to verify
+  * the settings and prints the received value to the console.
+  *
+  * @param IICInst Pointer to the I2C instance used for communication.
+
+
+ void mpu6050_gyroCfg(XIic* IICInst)
+ {
+ 	u8 iBuf;
+ 	u8 oBuf[2];
+
+ 	 // Set the GYRO_CONFIG register to configure gyroscope settings
+ 	oBuf[1] = GYRO_CONFIG;
+ 	oBuf[0] = 0x00;
+ 	XIic_Send(IIC_BADDR, 0x68, (u8 *)oBuf, 2, XIIC_STOP);
+
+ 	 // Read back the configured value from the GYRO_CONFIG register
+ 	oBuf[0] = GYRO_CONFIG;
+ 	XIic_Send(IIC_BADDR, 0x68, oBuf, 1, XIIC_REPEATED_START);
+ 	XIic_Recv(IIC_BADDR, 0x68, &iBuf, 1, XIIC_STOP);
+
+ 	// Print the received value to the console
+ 	xil_printf("Gyroscope Configuration is 0x%x\n\r", iBuf);
+
+ }
+
+ /**
+  *
+  * @brief Retrieves gyroscope data from the MPU6050 sensor.
+  *
+  * This function reads gyroscope data from the MPU6050 sensor via the I2C interface.
+  * It takes as input the I2C instance, a buffer to store the gyroscope data (angle_actual),
+  * and an integer representing the axis of interest (axis).
+  *
+  * @param IICInst Pointer to the I2C instance used for communication.
+  * @param angle_actual Pointer to the buffer to store the gyroscope data.
+  * @param axis Integer representing the axis of interest (SET_AXIS_X, SET_AXIS_Y, or SET_AXIS_Z).
+  *
+
+
+ void mpu6050_getGyroData(XIic* IICInst, u8 *angle_actual, int axis)
+ {
+     u8 iBuf;
+     u8 oBuf;
+
+     // Determine the address of the register containing gyroscope data based on the specified axis
+     oBuf = (axis == SET_AXIS_X) ? GYRO_XOUT_H : 0;
+
+     // Send the address of the selected register to the MPU6050 sensor
+     XIic_Send(IIC_BADDR, 0x68, (u8 *)&oBuf, 1, XIIC_REPEATED_START);
+
+     // Read 6 bytes of gyroscope data from the sensor and store them in the angle_actual buffer
+     XIic_Recv(IIC_BADDR, 0x68, (u8 *)angle_actual, 6, XIIC_STOP);
+
+ }
+
+ /**
+  *
+  * @brief Sets the MPU6050 sensor into sleep mode.
+  *
+  * This function configures the Power Management 1 register of the MPU6050 sensor
+  * via the I2C interface to put the sensor into sleep mode, thereby conserving power.
+  *
+  * @param IICInst Pointer to the I2C instance used for communication.
+  *
+
+ void mpu6050_setSleepMode(XIic *IICInst){
+
+	 u8 oBuf[2] = {PWR_MGMT_1, 0x40};			// Output buffer with sleep mode configuration
+
+	 // Send the sleep mode configuration to the MPU6050 sensor
+	 XIic_Send(IIC_BADDR, 0x68, (u8 *)&oBuf, 2, XIIC_STOP);
+ }*/
+
+ /**
+  *
+  * @brief Clears the sleep mode of the MPU6050 sensor.
+  *
+  * This function configures the Power Management 1 register of the MPU6050 sensor
+  * via the I2C interface to clear the sleep mode, ensuring the sensor is active and
+  * ready for measurements or commands.
+  *
+  * @param IICInst Pointer to the I2C instance used for communication.
+  *
+  */
+/*
+ void mpu6050_clearSleepMode(XIic* IICInst)
+ {
+
+	 u8 oBuf[2] = {PWR_MGMT_1, 0x00};		// Output buffer with wake-up configuration
+
+	 // Clear the sleep mode by sending the wake-up configuration to the MPU6050 sensor
+	 XIic_Send(IIC_BADDR, 0x68, (u8 *)&oBuf, 2, XIIC_STOP);
+ }*/
