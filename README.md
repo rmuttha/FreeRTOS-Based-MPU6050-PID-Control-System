@@ -11,6 +11,17 @@ This project implements a closed-loop PID control system using FreeRTOS on a Mic
 - FPGA: An FPGA is a type of digital logic chip that can be programmed to perform a wide variety of digital computing tasks.
   It is "field-programmable," which means it can be configured by the user after manufacturing.
 
+### FreeRTOS:
+- RTOS Basics: A Real-Time Operating System is used in environments where the timing of processor operations is crucial. RTOS systems are designed to manage the hardware resources of a computer and the hosting applications, ensuring timely and deterministic responses to external events.
+- FreeRTOS: It is an open-source, miniaturized RTOS designed for embedded devices. It allows developers to prioritize tasks effectively and handle concurrency, which is particularly useful in embedded systems where multiple operations need to occur simultaneously without causing delays in critical processing tasks.
+
+###  PID Control System:
+- PID Controller: Stands for Proportional, Integral, Derivative controller. It is a type of feedback control loop mechanism widely used in industrial control systems. A PID controller calculates an "error" value as the difference between a measured process variable and a desired setpoint. The controller attempts to minimize this error by adjusting process control inputs.
+- Application in the Project: In this project, the PID controller is used to manage the position of a gyroscope, attempting to achieve a specific orientation or 'roll' based on the user inputs. The control system adjusts in real-time to match the target roll angle with the angle reported by the sensor.
+
+### MPU-6050 Gyroscope/Accelerometer Sensor:
+- Sensor Overview: The MPU-6050 sensor integrates a 3-axis gyroscope and a 3-axis accelerometer on a single chip. It communicates with the Microblaze processor via the I2C interface, providing it with real-time orientation data.
+- Use in the Project: This sensor's data is crucial for the PID control system's functionality. The gyroscope provides the current orientation in terms of roll, pitch, and yaw, which is then used by the PID controller to compute how much adjustment is needed to reach the desired orientation.
 
 ## Learning Objectives
 
