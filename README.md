@@ -81,5 +81,5 @@ Refer to the `FAQ` section for common issues and troubleshooting steps related t
 
 ## Contact
 
-For further information or support, please contact the project members or the course instructor.
+For further information or support, please contact: rmuttha@pdx.edu
 
