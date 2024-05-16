@@ -62,13 +62,6 @@ This project implements a closed-loop PID control system using FreeRTOS on a Mic
 
 Run the system by powering up the FPGA board and loading the application via Vitis. Use the UART interface to interact with the system, setting parameters and switching between modes. Detailed instructions and command options are available in the terminal interface.
 
-## Deliverables
-
-- Source code for the MPU6050 driver and FreeRTOS tasks.
-- Design reports and diagrams illustrating the system architecture and data flow.
-- A video demo showcasing the working system.
-- Live demo sessions as scheduled.
-
 ## Troubleshooting
 
 Refer to the `FAQ` section for common issues and troubleshooting steps related to hardware configuration and software functionality.
